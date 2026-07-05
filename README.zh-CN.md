@@ -111,5 +111,5 @@ import 'ddys-react-router/styles.css';
 ## 构建 ZIP
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File tools/build-package.ps1 -Version 0.1.0
+powershell -ExecutionPolicy Bypass -File tools/build-package.ps1 -Version 0.1.1
 ```

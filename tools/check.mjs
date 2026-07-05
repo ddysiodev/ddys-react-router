@@ -49,7 +49,7 @@ console.log(JSON.stringify({ ok: true, files: (await listFiles(root)).length, ex
 async function checkPackage() {
   const pkg = JSON.parse(await read('package.json'));
   assert(pkg.name === 'ddys-react-router', 'package name mismatch.');
-  assert(pkg.version === '0.1.0', 'package version mismatch.');
+  assert(pkg.version === '0.1.1', 'package version mismatch.');
   assert(pkg.peerDependencies?.['react-router'] && pkg.peerDependencies?.react && pkg.peerDependencies?.['react-dom'], 'package must declare React Router and React peer dependencies.');
   assert(pkg.devDependencies?.tsx && pkg.scripts?.test?.includes('--import tsx'), 'runtime tests must use tsx for TS source imports.');
   for (const key of ['./server','./loaders','./actions','./resource-routes','./seo','./components','./components/client','./styles.css']) assert(pkg.exports?.[key], `missing export ${key}.`);
@@ -108,10 +108,12 @@ async function checkExamples() {
   for (const fragment of ['@react-router/dev/routes', "route('ddys'", "route('api/ddys/proxy'", "route('sitemap.xml'"]) assert(routes.includes(fragment), `routes.ts missing ${fragment}.`);
   assert((await read('examples/react-router-app/vite.config.ts')).includes('reactRouter()'), 'example vite config must use reactRouter plugin.');
   assert((await read('examples/react-router-app/tsconfig.json')).includes('"rootDirs"'), 'example tsconfig must include rootDirs for generated React Router types.');
+  const examplePkg = JSON.parse(await read('examples/react-router-app/package.json'));
+  assert(examplePkg.dependencies?.['@react-router/node'] && examplePkg.dependencies?.['@react-router/serve'] && examplePkg.scripts?.start?.includes('react-router-serve'), 'example package must keep server runtime dependencies and a production start script.');
   const serverEntry = await read('examples/react-router-app/app/entry.server.tsx');
   assert(serverEntry.includes('ServerRouter') && serverEntry.includes('renderToPipeableStream') && serverEntry.includes('createReadableStreamFromReadable'), 'example server entry must use React Router Node SSR streaming.');
   assert((await read('examples/react-router-app/app/entry.client.tsx')).includes('HydratedRouter'), 'example client entry must hydrate React Router.');
-  assert((await read('examples/react-router-app/package.json')).includes('"isbot"'), 'example package must include isbot for the default server entry.');
+  assert(examplePkg.dependencies?.isbot, 'example package must include isbot for the default server entry.');
   for (const file of exampleRoutes) assert((await read(file)).includes('ddys-react-router'), `${file} must import ddys-react-router.`);
   assert((await read('examples/react-router-app/app/root.tsx')).includes('ddys-react-router/styles.css'), 'root must import package styles.');
   assert((await read('examples/react-router-app/app/routes/ddys.search.tsx')).includes('DdysSearch'), 'search route must include interactive search component.');

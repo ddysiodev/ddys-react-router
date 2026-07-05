@@ -13,7 +13,7 @@ export function createDdysDiagnosticsResourceRoute(options: DdysDiagnosticsResou
   return async function loader(_args: DdysRouteArgs) {
     const config = getDdysConfig(options.config);
     if (!config.diagnostics.enabled) return Response.json({ success: false, message: 'DDYS diagnostics is disabled.' }, { status: 403 });
-    return Response.json({ success: true, data: { version: DDYS_REACT_ROUTER_VERSION, runtime: typeof process === 'object' ? 'node' : 'web', reactRouter: 'framework-mode', config: safeDdysConfig(config), cache: ddysCacheStats(), views: config.proxy.allowRoutes, resourceRoutes: ['/api/ddys/proxy', '/api/ddys/request', '/api/ddys/diagnostics', '/api/ddys/revalidate', '/sitemap.xml', '/robots.txt', '/manifest.webmanifest'] } });
+    return Response.json({ success: true, data: { version: DDYS_REACT_ROUTER_VERSION, runtime: typeof process === 'object' ? 'node' : 'web', reactRouter: 'framework-mode', config: safeDdysConfig(config), cache: ddysCacheStats(), views: config.proxy.allowRoutes, resourceRoutes: ['/api/ddys/proxy', '/api/ddys/request', '/api/ddys/diagnostics', '/api/ddys/revalidate', '/sitemap.xml', '/robots.txt', '/manifest.webmanifest', '/favicon.ico'] } });
   };
 }
 

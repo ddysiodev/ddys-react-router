@@ -89,7 +89,14 @@ export { ddysManifestLoader as loader } from 'ddys-react-router/resource-routes'
 export { ddysFaviconLoader as loader } from 'ddys-react-router/resource-routes';
 ```
 
-`ddys-react-router/seo` 提供 `createDdysSeo`、`createDdysMovieSeo`、`createDdysMovieJsonLd`、`createDdysSitemap`、`createDdysRobotsText`、`createDdysManifest`。
+`ddys-react-router/seo` 提供 `createDdysSeo`、`createDdysMovieSeo`、`createDdysMovieJsonLd`、`createDdysMeta`、`createDdysDocumentLinks`、`createDdysSitemap`、`createDdysRobotsText`、`createDdysManifest`、`createDdysFaviconSvg`。
+
+```tsx
+import { createDdysDocumentLinks, createDdysMeta } from 'ddys-react-router/seo';
+
+export const links = () => createDdysDocumentLinks();
+export const meta = ({ loaderData }: { loaderData: unknown }) => createDdysMeta(loaderData as any);
+```
 
 ## 组件
 
@@ -112,5 +119,5 @@ import 'ddys-react-router/styles.css';
 ## 构建 ZIP
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File tools/build-package.ps1 -Version 0.1.2
+powershell -ExecutionPolicy Bypass -File tools/build-package.ps1 -Version 0.1.3
 ```

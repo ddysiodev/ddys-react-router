@@ -14,7 +14,7 @@ const requiredFiles = [
   'src/seo/index.ts',
   'src/components/card.tsx','src/components/diagnostics.tsx','src/components/grid.tsx','src/components/list.tsx','src/components/movie-detail.tsx','src/components/request-form.tsx','src/components/search.tsx','src/components/sources.tsx','src/components/utils.ts','src/components/view.tsx','src/components/client.ts','src/components/index.ts','src/styles/ddys.css',
   'public/images/icon-16.png','public/images/icon-32.png','public/images/icon-192.png','public/images/icon-512.png','public/images/logo.png',
-  'examples/react-router-app/package.json','examples/react-router-app/.npmignore','examples/react-router-app/vite.config.ts','examples/react-router-app/react-router.config.ts','examples/react-router-app/tsconfig.json','examples/react-router-app/app/entry.client.tsx','examples/react-router-app/app/entry.server.tsx','examples/react-router-app/app/root.tsx','examples/react-router-app/app/routes.ts','examples/react-router-app/app/routes/favicon.ico.ts',
+  'examples/react-router-app/package.json','examples/react-router-app/.npmignore','examples/react-router-app/vite.config.ts','examples/react-router-app/react-router.config.ts','examples/react-router-app/tsconfig.json','examples/react-router-app/app/entry.client.tsx','examples/react-router-app/app/entry.server.tsx','examples/react-router-app/app/lib/seo.ts','examples/react-router-app/app/root.tsx','examples/react-router-app/app/routes.ts','examples/react-router-app/app/routes/favicon.ico.ts',
   'tests/structure.test.mjs','tests/runtime.test.mjs','tools/build-package.ps1','tools/check.mjs'
 ];
 
@@ -49,7 +49,7 @@ console.log(JSON.stringify({ ok: true, files: (await listFiles(root)).length, ex
 async function checkPackage() {
   const pkg = JSON.parse(await read('package.json'));
   assert(pkg.name === 'ddys-react-router', 'package name mismatch.');
-  assert(pkg.version === '0.1.2', 'package version mismatch.');
+  assert(pkg.version === '0.1.3', 'package version mismatch.');
   assert(pkg.peerDependencies?.['react-router'] && pkg.peerDependencies?.react && pkg.peerDependencies?.['react-dom'], 'package must declare React Router and React peer dependencies.');
   assert(pkg.devDependencies?.tsx && pkg.scripts?.test?.includes('--import tsx'), 'runtime tests must use tsx for TS source imports.');
   for (const key of ['./server','./loaders','./actions','./resource-routes','./seo','./components','./components/client','./styles.css']) assert(pkg.exports?.[key], `missing export ${key}.`);
@@ -88,8 +88,9 @@ async function checkFrameworkEntries() {
   }
   const revalidate = await read('src/resource-routes/revalidate.ts');
   assert(revalidate.includes('!config.revalidateToken') && revalidate.includes('x-ddys-revalidate-token') && revalidate.includes('revalidateDdysCache'), 'revalidate resource route must require token and clear cache.');
+  assert((await read('src/resource-routes/diagnostics.ts')).includes('/favicon.ico'), 'diagnostics must list favicon resource route.');
   const seo = await read('src/seo/index.ts');
-  for (const fragment of ['createDdysSeo', 'createDdysMovieSeo', 'createDdysMovieJsonLd', 'createDdysSitemap', 'createDdysRobotsText', 'createDdysManifest', 'createDdysFaviconSvg']) assert(seo.includes(fragment), `seo helper missing ${fragment}.`);
+  for (const fragment of ['createDdysSeo', 'createDdysMovieSeo', 'createDdysMovieJsonLd', 'createDdysMeta', 'createDdysDocumentLinks', 'createDdysSitemap', 'createDdysRobotsText', 'createDdysManifest', 'createDdysFaviconSvg']) assert(seo.includes(fragment), `seo helper missing ${fragment}.`);
 }
 
 async function checkComponents() {
@@ -108,6 +109,8 @@ async function checkExamples() {
   for (const fragment of ['@react-router/dev/routes', "route('ddys'", "route('api/ddys/proxy'", "route('sitemap.xml'", "route('favicon.ico'"]) assert(routes.includes(fragment), `routes.ts missing ${fragment}.`);
   assert((await read('examples/react-router-app/vite.config.ts')).includes('reactRouter()'), 'example vite config must use reactRouter plugin.');
   assert((await read('examples/react-router-app/tsconfig.json')).includes('"rootDirs"'), 'example tsconfig must include rootDirs for generated React Router types.');
+  assert((await read('examples/react-router-app/app/root.tsx')).includes('createDdysDocumentLinks'), 'root must expose manifest and favicon document links.');
+  assert((await read('examples/react-router-app/app/lib/seo.ts')).includes('createDdysMeta'), 'example must provide a shared route meta helper.');
   const examplePkg = JSON.parse(await read('examples/react-router-app/package.json'));
   assert(examplePkg.dependencies?.['@react-router/node'] && examplePkg.dependencies?.['@react-router/serve'] && examplePkg.scripts?.start?.includes('react-router-serve'), 'example package must keep server runtime dependencies and a production start script.');
   const serverEntry = await read('examples/react-router-app/app/entry.server.tsx');
@@ -116,6 +119,9 @@ async function checkExamples() {
   assert(examplePkg.dependencies?.isbot, 'example package must include isbot for the default server entry.');
   for (const file of exampleRoutes) assert((await read(file)).includes('ddys-react-router'), `${file} must import ddys-react-router.`);
   assert((await read('examples/react-router-app/app/root.tsx')).includes('ddys-react-router/styles.css'), 'root must import package styles.');
+  for (const file of exampleRoutes.filter((file) => /ddys.*\.(tsx)$/.test(file) && !file.includes('ddys-layout'))) {
+    assert((await read(file)).includes("export { meta } from '../lib/seo'"), `${file} must export route meta.`);
+  }
   assert((await read('examples/react-router-app/app/routes/ddys.search.tsx')).includes('DdysSearch'), 'search route must include interactive search component.');
   assert((await read('examples/react-router-app/app/routes/ddys.request.tsx')).includes('DdysRequestForm'), 'request route must include request form.');
 }
@@ -131,7 +137,7 @@ async function checkDocs() {
   const en = await read('README.md');
   const zh = await read('README.zh-CN.md');
   assert(en.includes('[中文](README.zh-CN.md)') && zh.includes('[English](README.md)'), 'READMEs must link to each other.');
-  for (const fragment of ['ddys-react-router', 'React Router', 'Framework Mode', 'loader', 'action', 'resource-routes', 'DDYS_API_KEY', 'DdysView', 'DdysRequestForm', 'createDdysSitemap', 'ddysFaviconLoader']) assert(en.includes(fragment) && zh.includes(fragment), `READMEs missing ${fragment}.`);
+  for (const fragment of ['ddys-react-router', 'React Router', 'Framework Mode', 'loader', 'action', 'resource-routes', 'DDYS_API_KEY', 'DdysView', 'DdysRequestForm', 'createDdysSitemap', 'createDdysMeta', 'createDdysDocumentLinks', 'ddysFaviconLoader']) assert(en.includes(fragment) && zh.includes(fragment), `READMEs missing ${fragment}.`);
 }
 
 async function checkBuildScript() {

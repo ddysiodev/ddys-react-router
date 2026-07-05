@@ -1,5 +1,8 @@
 import 'ddys-react-router/styles.css';
+import { createDdysDocumentLinks } from 'ddys-react-router/seo';
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from 'react-router';
+
+export const links = () => createDdysDocumentLinks();
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

@@ -45,6 +45,37 @@ test('revalidate resource route requires a configured token', async () => {
   assert.equal((await accepted.json()).success, true);
 });
 
+test('seo helpers create route meta and document links', async () => {
+  const { createDdysDocumentLinks, createDdysMeta } = await import('../src/seo/index.ts');
+  const meta = createDdysMeta({
+    seo: {
+      title: 'Movie Title',
+      description: 'Movie summary',
+      canonical: 'https://example.test/ddys/movie/movie-title',
+      openGraph: { title: 'Movie Title', description: 'Movie summary', url: 'https://example.test/ddys/movie/movie-title', siteName: 'DDYS', image: 'https://example.test/poster.jpg' },
+      twitter: { card: 'summary_large_image', title: 'Movie Title', description: 'Movie summary', image: 'https://example.test/poster.jpg' }
+    },
+    jsonLd: { '@context': 'https://schema.org', '@type': 'Movie', name: 'Movie Title' }
+  });
+  assert.ok(meta.some((item) => item.title === 'Movie Title'));
+  assert.ok(meta.some((item) => item.tagName === 'link' && item.rel === 'canonical'));
+  assert.ok(meta.some((item) => item.property === 'og:image'));
+  assert.ok(meta.some((item) => item['script:ld+json']));
+
+  const links = createDdysDocumentLinks();
+  assert.ok(links.some((item) => item.rel === 'icon' && item.href === '/favicon.ico'));
+  assert.ok(links.some((item) => item.rel === 'manifest' && item.href === '/manifest.webmanifest'));
+});
+
+test('diagnostics include all bundled resource routes', async () => {
+  const { createDdysDiagnosticsResourceRoute } = await import('../src/resource-routes/diagnostics.ts');
+  const handler = createDdysDiagnosticsResourceRoute({ config: { diagnostics: { enabled: true } } });
+  const response = await handler({ request: new Request('https://example.test/api/ddys/diagnostics') });
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  assert.ok(body.data.resourceRoutes.includes('/favicon.ico'));
+});
+
 function eventFor(body) {
   return {
     request: new Request('https://example.test/api/ddys/revalidate', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })

@@ -1,4 +1,5 @@
 import type { DdysConfig, DdysConfigInput } from '../client/config';
+import type { HtmlLinkDescriptor, MetaDescriptor } from 'react-router';
 import type { DdysItem } from '../types/ddys';
 import { createDdysServerClient } from '../server/client';
 import { getDdysConfig } from '../server/config';
@@ -20,6 +21,36 @@ export interface DdysSitemapOptions {
   staticPaths?: string[];
 }
 
+export interface DdysSeoResult {
+  title: string;
+  description: string;
+  canonical?: string;
+  openGraph: {
+    title: string;
+    description: string;
+    url?: string;
+    siteName: string;
+    image?: string;
+  };
+  twitter: {
+    card: string;
+    title: string;
+    description: string;
+    image?: string;
+  };
+}
+
+export interface DdysMetaData {
+  seo?: Partial<DdysSeoResult>;
+  jsonLd?: unknown;
+}
+
+export interface DdysDocumentLinksOptions {
+  faviconHref?: string | false;
+  manifestHref?: string | false;
+  appleTouchIconHref?: string | false;
+}
+
 export function createDdysSeo(config: DdysConfig, input: DdysSeoInput = {}) {
   const siteName = input.siteName ?? 'DDYS';
   const title = input.title ?? siteName;
@@ -27,6 +58,39 @@ export function createDdysSeo(config: DdysConfig, input: DdysSeoInput = {}) {
   const canonical = absoluteUrl(config.siteBaseUrl, input.path ?? config.reactRouter.mountPath);
   const image = input.image ? absoluteUrl(config.siteBaseUrl, input.image) : undefined;
   return { title, description, canonical, openGraph: { title, description, url: canonical, siteName, image }, twitter: { card: image ? 'summary_large_image' : 'summary', title, description, image } };
+}
+
+export function createDdysMeta(input?: DdysMetaData | DdysSeoResult | null): MetaDescriptor[] {
+  const data = input && typeof input === 'object' && 'seo' in input ? input as DdysMetaData : { seo: input as DdysSeoResult | undefined };
+  const seo = data.seo;
+  const meta: MetaDescriptor[] = [];
+  if (!seo) return meta;
+
+  pushTitle(meta, seo.title);
+  pushName(meta, 'description', seo.description);
+  pushLink(meta, 'canonical', seo.canonical);
+  pushProperty(meta, 'og:title', seo.openGraph?.title ?? seo.title);
+  pushProperty(meta, 'og:description', seo.openGraph?.description ?? seo.description);
+  pushProperty(meta, 'og:url', seo.openGraph?.url ?? seo.canonical);
+  pushProperty(meta, 'og:site_name', seo.openGraph?.siteName);
+  pushProperty(meta, 'og:image', seo.openGraph?.image);
+  pushName(meta, 'twitter:card', seo.twitter?.card);
+  pushName(meta, 'twitter:title', seo.twitter?.title ?? seo.title);
+  pushName(meta, 'twitter:description', seo.twitter?.description ?? seo.description);
+  pushName(meta, 'twitter:image', seo.twitter?.image);
+  if (data.jsonLd && typeof data.jsonLd === 'object') meta.push({ 'script:ld+json': data.jsonLd as Record<string, unknown> });
+  return meta;
+}
+
+export function createDdysDocumentLinks(options: DdysDocumentLinksOptions = {}): HtmlLinkDescriptor[] {
+  const links: HtmlLinkDescriptor[] = [];
+  const faviconHref = options.faviconHref ?? '/favicon.ico';
+  const manifestHref = options.manifestHref ?? '/manifest.webmanifest';
+  const appleTouchIconHref = options.appleTouchIconHref ?? false;
+  if (faviconHref) links.push({ rel: 'icon', href: faviconHref, type: 'image/svg+xml' });
+  if (manifestHref) links.push({ rel: 'manifest', href: manifestHref });
+  if (appleTouchIconHref) links.push({ rel: 'apple-touch-icon', href: appleTouchIconHref });
+  return links;
 }
 
 export function createDdysMovieSeo(config: DdysConfig, movie: DdysItem) {
@@ -99,4 +163,20 @@ function escapeXml(value: string) {
 
 function stripEmpty(input: Record<string, unknown>) {
   return Object.fromEntries(Object.entries(input).filter(([, value]) => value !== undefined && value !== null && value !== ''));
+}
+
+function pushTitle(meta: MetaDescriptor[], title?: string) {
+  if (title) meta.push({ title });
+}
+
+function pushName(meta: MetaDescriptor[], name: string, content?: string) {
+  if (content) meta.push({ name, content });
+}
+
+function pushProperty(meta: MetaDescriptor[], property: string, content?: string) {
+  if (content) meta.push({ property, content });
+}
+
+function pushLink(meta: MetaDescriptor[], rel: string, href?: string) {
+  if (href) meta.push({ tagName: 'link', rel, href });
 }

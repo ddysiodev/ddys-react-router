@@ -89,7 +89,14 @@ export { ddysManifestLoader as loader } from 'ddys-react-router/resource-routes'
 export { ddysFaviconLoader as loader } from 'ddys-react-router/resource-routes';
 ```
 
-Programmatic helpers are available from `ddys-react-router/seo`: `createDdysSeo`, `createDdysMovieSeo`, `createDdysMovieJsonLd`, `createDdysSitemap`, `createDdysRobotsText`, `createDdysManifest`, and `createDdysFaviconSvg`.
+Programmatic helpers are available from `ddys-react-router/seo`: `createDdysSeo`, `createDdysMovieSeo`, `createDdysMovieJsonLd`, `createDdysMeta`, `createDdysDocumentLinks`, `createDdysSitemap`, `createDdysRobotsText`, `createDdysManifest`, and `createDdysFaviconSvg`.
+
+```tsx
+import { createDdysDocumentLinks, createDdysMeta } from 'ddys-react-router/seo';
+
+export const links = () => createDdysDocumentLinks();
+export const meta = ({ loaderData }: { loaderData: unknown }) => createDdysMeta(loaderData as any);
+```
 
 ## Components
 
@@ -112,5 +119,5 @@ Full proxy, diagnostics, request form, revalidate, and server loaders require a 
 ## Build ZIP
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File tools/build-package.ps1 -Version 0.1.2
+powershell -ExecutionPolicy Bypass -File tools/build-package.ps1 -Version 0.1.3
 ```

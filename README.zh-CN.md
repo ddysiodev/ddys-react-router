@@ -2,7 +2,7 @@
 
 [English](README.md)
 
-`ddys-react-router` 是低端影视 API 的官方 React Router Framework Mode 集成包，提供 TypeScript API Client、服务端 loader、action、resource-routes、React 组件、缓存、SEO、诊断和安全求片表单。
+`ddys-react-router` 是低端影视 API 的官方 React Router Framework Mode 集成包，提供 TypeScript API Client、服务端 loader、action、resource routes、React 组件、缓存、SEO、诊断和安全求片表单。
 
 ## 安装
 
@@ -10,7 +10,7 @@
 npm install ddys-react-router react-router react react-dom
 ```
 
-React Router 8 要求 React 19。Framework Mode 使用 `@react-router/dev`：
+React Router 8 要求 React 19。Framework Mode 需要使用 `@react-router/dev`：
 
 ```ts
 // vite.config.ts
@@ -78,7 +78,7 @@ export { ddysDiagnosticsLoader as loader, ddysDiagnosticsAction as action } from
 export { ddysRevalidateAction as action } from 'ddys-react-router/resource-routes';
 ```
 
-`/api/ddys/proxy` 会先做 allow-list 校验。浏览器只请求本地 resource route，低端影视 API Key 不会进入浏览器 bundle。`/api/ddys/revalidate` 必须配置 `DDYS_REVALIDATE_TOKEN`，未配置时返回 403。
+`/api/ddys/proxy` 会先做 allow-list 校验。浏览器只请求本地 resource route，所以低端影视 API Key 不会进入浏览器 bundle。`/api/ddys/revalidate` 必须配置 `DDYS_REVALIDATE_TOKEN`，未配置时返回 403。
 
 ## SEO
 
@@ -110,7 +110,7 @@ import 'ddys-react-router/styles.css';
 
 ## 示例
 
-见 `examples/react-router-app`。它是一个 Framework Mode 示例，包含 `app/routes.ts`、loader、action、resource-routes、sitemap、robots、manifest 和 DDYS 页面。
+见 `examples/react-router-app`。它是一个 Framework Mode 示例，包含 `app/routes.ts`、loader、action、resource routes、sitemap、robots、manifest、favicon 和 DDYS 页面。
 
 ## 静态/SPA 说明
 
@@ -119,5 +119,5 @@ import 'ddys-react-router/styles.css';
 ## 构建 ZIP
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File tools/build-package.ps1 -Version 0.1.3
+powershell -ExecutionPolicy Bypass -File tools/build-package.ps1 -Version 0.1.4
 ```

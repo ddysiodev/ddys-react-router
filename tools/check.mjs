@@ -49,7 +49,7 @@ console.log(JSON.stringify({ ok: true, files: (await listFiles(root)).length, ex
 async function checkPackage() {
   const pkg = JSON.parse(await read('package.json'));
   assert(pkg.name === 'ddys-react-router', 'package name mismatch.');
-  assert(pkg.version === '0.1.3', 'package version mismatch.');
+  assert(pkg.version === '0.1.4', 'package version mismatch.');
   assert(pkg.peerDependencies?.['react-router'] && pkg.peerDependencies?.react && pkg.peerDependencies?.['react-dom'], 'package must declare React Router and React peer dependencies.');
   assert(pkg.devDependencies?.tsx && pkg.scripts?.test?.includes('--import tsx'), 'runtime tests must use tsx for TS source imports.');
   for (const key of ['./server','./loaders','./actions','./resource-routes','./seo','./components','./components/client','./styles.css']) assert(pkg.exports?.[key], `missing export ${key}.`);
@@ -137,6 +137,7 @@ async function checkDocs() {
   const en = await read('README.md');
   const zh = await read('README.zh-CN.md');
   assert(en.includes('[中文](README.zh-CN.md)') && zh.includes('[English](README.md)'), 'READMEs must link to each other.');
+  assert(zh.includes('DDYS React Router 集成包') && zh.includes('安装') && zh.includes('组件') && zh.includes('构建 ZIP'), 'Chinese README must be readable UTF-8 text.');
   for (const fragment of ['ddys-react-router', 'React Router', 'Framework Mode', 'loader', 'action', 'resource-routes', 'DDYS_API_KEY', 'DdysView', 'DdysRequestForm', 'createDdysSitemap', 'createDdysMeta', 'createDdysDocumentLinks', 'ddysFaviconLoader']) assert(en.includes(fragment) && zh.includes(fragment), `READMEs missing ${fragment}.`);
 }
 
@@ -155,7 +156,7 @@ async function checkForbiddenFiles() {
 }
 
 async function checkForbiddenText() {
-  const patterns = ['ddys-nextjs', 'ddys-next', 'next.config', 'server-only', 'next/cache', 'next/server', 'ghp_', 'github_pat_', 'npm_', '\uFFFD'];
+  const patterns = ['ddys-nextjs', 'ddys-next', 'next.config', 'server-only', 'next/cache', 'next/server', 'ghp_', 'github_pat_', 'npm_', '\uFFFD', '涓枃', '闆嗘垚', '銆乣', '鏄', '鎻愪', '瀹夎'];
   for (const full of await listFiles(root)) {
     const rel = slash(path.relative(root, full));
     if (!isTextFile(rel) || rel === 'tools/check.mjs') continue;

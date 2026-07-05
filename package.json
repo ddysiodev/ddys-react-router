@@ -1,0 +1,53 @@
+{
+  "name": "ddys-react-router",
+  "version": "0.1.0",
+  "description": "Official React Router Framework Mode integration for the DDYS API with loaders, actions, resource routes, React components, caching, SEO helpers, diagnostics, and request form.",
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://www.npmjs.com/package/ddys-react-router",
+  "publishConfig": { "access": "public" },
+  "repository": { "type": "git", "url": "git+https://github.com/ddysiodev/ddys-react-router.git" },
+  "bugs": { "url": "https://github.com/ddysiodev/ddys-react-router/issues" },
+  "keywords": ["ddys", "react-router", "remix", "framework-mode", "loader", "action", "resource-routes", "react", "seo", "movies", "video", "api"],
+  "sideEffects": ["./src/styles/ddys.css"],
+  "exports": {
+    ".": { "types": "./src/index.ts", "import": "./src/index.ts" },
+    "./client": { "types": "./src/client/index.ts", "import": "./src/client/index.ts" },
+    "./server": { "types": "./src/server/index.ts", "import": "./src/server/index.ts" },
+    "./components": { "types": "./src/components/index.ts", "import": "./src/components/index.ts" },
+    "./components/client": { "types": "./src/components/client.ts", "import": "./src/components/client.ts" },
+    "./actions": { "types": "./src/actions/index.ts", "import": "./src/actions/index.ts" },
+    "./loaders": { "types": "./src/loaders/index.ts", "import": "./src/loaders/index.ts" },
+    "./resource-routes": { "types": "./src/resource-routes/index.ts", "import": "./src/resource-routes/index.ts" },
+    "./seo": { "types": "./src/seo/index.ts", "import": "./src/seo/index.ts" },
+    "./styles.css": "./src/styles/ddys.css"
+  },
+  "files": ["src", "examples", "public", "README.md", "README.zh-CN.md", "LICENSE", ".env.example", "react-router.config.example.ts"],
+  "peerDependencies": {
+    "react": ">=19.2.7",
+    "react-dom": ">=19.2.7",
+    "react-router": ">=8.1.0 <9.0.0"
+  },
+  "devDependencies": {
+    "@react-router/dev": "^8.1.0",
+    "@react-router/node": "^8.1.0",
+    "@react-router/serve": "^8.1.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-rsc": "0.5.26",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-router": "^8.1.0",
+    "react-server-dom-webpack": "^19.2.7",
+    "tsx": "^4.23.0",
+    "typescript": "^5.9.0",
+    "vite": "^8.1.3"
+  },
+  "scripts": {
+    "check": "node tools/check.mjs",
+    "test": "node tools/check.mjs && node --import tsx --test tests/*.test.mjs",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": { "node": ">=22.0.0" }
+}

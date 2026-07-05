@@ -1,0 +1,14 @@
+/dist/
+/node_modules/
+/.react-router/
+/build/
+/coverage/
+*.log
+*.tmp
+*.cache
+*.tgz
+*.zip
+pnpm-lock.yaml
+.env
+.env.*
+!.env.example

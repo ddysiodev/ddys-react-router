@@ -1,0 +1,12 @@
+node_modules
+.react-router
+build
+dist
+coverage
+package
+*.tgz
+*.zip
+*.log
+pnpm-lock.yaml
+.env
+.env.*

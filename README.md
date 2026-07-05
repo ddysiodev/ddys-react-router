@@ -86,9 +86,10 @@ export { ddysRevalidateAction as action } from 'ddys-react-router/resource-route
 export { ddysSitemapLoader as loader } from 'ddys-react-router/resource-routes';
 export { ddysRobotsLoader as loader } from 'ddys-react-router/resource-routes';
 export { ddysManifestLoader as loader } from 'ddys-react-router/resource-routes';
+export { ddysFaviconLoader as loader } from 'ddys-react-router/resource-routes';
 ```
 
-Programmatic helpers are available from `ddys-react-router/seo`: `createDdysSeo`, `createDdysMovieSeo`, `createDdysMovieJsonLd`, `createDdysSitemap`, `createDdysRobotsText`, and `createDdysManifest`.
+Programmatic helpers are available from `ddys-react-router/seo`: `createDdysSeo`, `createDdysMovieSeo`, `createDdysMovieJsonLd`, `createDdysSitemap`, `createDdysRobotsText`, `createDdysManifest`, and `createDdysFaviconSvg`.
 
 ## Components
 
@@ -102,7 +103,7 @@ Components include `DdysCard`, `DdysGrid`, `DdysList`, `DdysMovieDetail`, `DdysS
 
 ## Example
 
-See `examples/react-router-app` for a Framework Mode app with `app/routes.ts`, loaders, actions, resource-routes, sitemap, robots, manifest, and DDYS pages.
+See `examples/react-router-app` for a Framework Mode app with `app/routes.ts`, loaders, actions, resource-routes, sitemap, robots, manifest, favicon, and DDYS pages.
 
 ## Static/SPA Notes
 
@@ -111,5 +112,5 @@ Full proxy, diagnostics, request form, revalidate, and server loaders require a 
 ## Build ZIP
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File tools/build-package.ps1 -Version 0.1.1
+powershell -ExecutionPolicy Bypass -File tools/build-package.ps1 -Version 0.1.2
 ```

@@ -1,6 +1,6 @@
 {
   "name": "ddys-react-router",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Official React Router Framework Mode integration for the DDYS API with loaders, actions, resource routes, React components, caching, SEO helpers, diagnostics, and request form.",
   "type": "module",
   "license": "MIT",

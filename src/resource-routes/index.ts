@@ -1,6 +1,6 @@
 export { createDdysDiagnosticsResourceRoute, createDdysDiagnosticsTestResourceRoute, ddysDiagnosticsLoader, ddysDiagnosticsAction } from './diagnostics';
 export type { DdysDiagnosticsResourceOptions } from './diagnostics';
-export { createDdysManifestResourceRoute, createDdysRobotsResourceRoute, createDdysSitemapResourceRoute, ddysManifestLoader, ddysRobotsLoader, ddysSitemapLoader } from './seo';
+export { createDdysFaviconResourceRoute, createDdysManifestResourceRoute, createDdysRobotsResourceRoute, createDdysSitemapResourceRoute, ddysFaviconLoader, ddysManifestLoader, ddysRobotsLoader, ddysSitemapLoader } from './seo';
 export type { DdysSeoResourceOptions } from './seo';
 export { createDdysProxyResourceRoute, ddysProxyLoader } from './proxy';
 export type { DdysProxyResourceOptions } from './proxy';

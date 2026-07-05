@@ -66,6 +66,10 @@ export function createDdysManifest(config: DdysConfig) {
   return { name: 'DDYS', short_name: 'DDYS', description: 'DDYS API powered movie and video experience.', start_url: config.reactRouter.mountPath, scope: '/', display: 'standalone', background_color: '#f8fafc', theme_color: '#17324d', icons: [{ src: `${config.reactRouter.assetsPath}/icon-192.png`, sizes: '192x192', type: 'image/png' }, { src: `${config.reactRouter.assetsPath}/icon-512.png`, sizes: '512x512', type: 'image/png' }] };
 }
 
+export function createDdysFaviconSvg() {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#17324d"/><path d="M16 20h18c8.3 0 14 5 14 12s-5.7 12-14 12H16V20zm10 8v8h8c3 0 5-1.6 5-4s-2-4-5-4h-8z" fill="#ffffff"/><path d="M16 46h32v6H16z" fill="#32b8c6"/></svg>`;
+}
+
 function asItems(payload: unknown): DdysItem[] {
   if (Array.isArray(payload)) return payload as DdysItem[];
   if (payload && typeof payload === 'object' && Array.isArray((payload as { data?: unknown }).data)) return (payload as { data: DdysItem[] }).data;

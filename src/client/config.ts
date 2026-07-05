@@ -68,7 +68,7 @@ export type DdysConfigInput = Partial<Omit<DdysConfig, 'cache' | 'proxy' | 'requ
 };
 
 export type DdysRuntimeEnv = Record<string, string | undefined>;
-export const DDYS_REACT_ROUTER_VERSION = '0.1.1';
+export const DDYS_REACT_ROUTER_VERSION = '0.1.2';
 
 export const DEFAULT_DDYS_CONFIG: DdysConfig = {
   apiBaseUrl: 'https://ddys.io/api/v1',

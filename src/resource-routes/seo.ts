@@ -1,5 +1,5 @@
 import type { DdysConfigInput } from '../client/config';
-import { createDdysManifest, createDdysRobotsText, createDdysSitemap } from '../seo';
+import { createDdysFaviconSvg, createDdysManifest, createDdysRobotsText, createDdysSitemap } from '../seo';
 import { getDdysConfig } from '../server/config';
 import type { DdysRouteArgs } from '../loaders';
 
@@ -25,6 +25,13 @@ export function createDdysManifestResourceRoute(options: DdysSeoResourceOptions 
   };
 }
 
+export function createDdysFaviconResourceRoute(_options: DdysSeoResourceOptions = {}) {
+  return async function loader(_args: DdysRouteArgs) {
+    return new Response(createDdysFaviconSvg(), { headers: { 'Content-Type': 'image/svg+xml; charset=utf-8', 'Cache-Control': 'public, max-age=86400' } });
+  };
+}
+
 export const ddysSitemapLoader = createDdysSitemapResourceRoute();
 export const ddysRobotsLoader = createDdysRobotsResourceRoute();
 export const ddysManifestLoader = createDdysManifestResourceRoute();
+export const ddysFaviconLoader = createDdysFaviconResourceRoute();

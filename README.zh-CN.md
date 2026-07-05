@@ -86,6 +86,7 @@ export { ddysRevalidateAction as action } from 'ddys-react-router/resource-route
 export { ddysSitemapLoader as loader } from 'ddys-react-router/resource-routes';
 export { ddysRobotsLoader as loader } from 'ddys-react-router/resource-routes';
 export { ddysManifestLoader as loader } from 'ddys-react-router/resource-routes';
+export { ddysFaviconLoader as loader } from 'ddys-react-router/resource-routes';
 ```
 
 `ddys-react-router/seo` 提供 `createDdysSeo`、`createDdysMovieSeo`、`createDdysMovieJsonLd`、`createDdysSitemap`、`createDdysRobotsText`、`createDdysManifest`。
@@ -111,5 +112,5 @@ import 'ddys-react-router/styles.css';
 ## 构建 ZIP
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File tools/build-package.ps1 -Version 0.1.1
+powershell -ExecutionPolicy Bypass -File tools/build-package.ps1 -Version 0.1.2
 ```

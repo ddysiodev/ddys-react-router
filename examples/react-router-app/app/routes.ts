@@ -25,5 +25,6 @@ export default [
   route('api/ddys/revalidate', 'routes/api.ddys.revalidate.ts'),
   route('sitemap.xml', 'routes/sitemap.xml.ts'),
   route('robots.txt', 'routes/robots.txt.ts'),
-  route('manifest.webmanifest', 'routes/manifest.webmanifest.ts')
+  route('manifest.webmanifest', 'routes/manifest.webmanifest.ts'),
+  route('favicon.ico', 'routes/favicon.ico.ts')
 ] satisfies RouteConfig;
